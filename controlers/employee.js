@@ -1,7 +1,5 @@
-const Employees = require('../models/employee');
-const { StatusCodes } = require('http-status-codes');
-const moment = require('moment');
-const CustomError = require('../errors');
+const Employees = require("../models/Employee");
+const { StatusCodes } = require("http-status-codes");
 
 const getAllEmployees = async (req, res) => {
   const employees = await Employees.find({});
@@ -25,13 +23,13 @@ const getFilterest = async (req, res) => {
   try {
     const queryObject = {};
     if (name) {
-      queryObject.name = { $regex: name, $options: 'i' };
+      queryObject.name = { $regex: name, $options: "i" };
     }
     if (active) {
-      queryObject.active = active === 'true' ? true : false;
+      queryObject.active = active === "true" ? true : false;
     }
     if (divisi) {
-      const divisiArray = divisi.split(',');
+      const divisiArray = divisi.split(",");
       queryObject.divisi = { $in: divisiArray };
     }
 
@@ -43,8 +41,8 @@ const getFilterest = async (req, res) => {
     // console.log('Received endDate:', endDate);
 
     if (startDate && endDate) {
-      queryObject['deuDate.startDate'] = { $lte: endDate };
-      queryObject['deuDate.endDate'] = { $gte: startDate };
+      const searchStartDate = { $gte: startDate, $lte: endDate };
+      queryObject["deuDate.startDate"] = searchStartDate;
     }
 
     // console.log(queryObject);

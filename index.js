@@ -1,28 +1,32 @@
-require('dotenv').config();
-require('express-async-errors');
+require("dotenv").config();
+require("express-async-errors");
 // express
-const express = require('express');
+const express = require("express");
 const app = express();
+const cors = require("cors");
 
 // file
-const notFound = require('./middleware/notFound');
-const errorHandlerMiddleware = require('./middleware/errorHandlerMiddleware');
+const notFound = require("./middleware/notFound");
+const errorHandlerMiddleware = require("./middleware/errorHandlerMiddleware");
 // routers
-const routerEmployees = require('./routes/employee');
+const routerEmployees = require("./routes/employee");
 
 // database
-const connectDb = require('./db/connect');
+const connectDb = require("./db/connect");
 
 // PORT Listening
 const PORT = process.env.PORT || 3000;
 
 // middleware
 app.use(express.json());
-app.use(express.static('public'));
+
+app.use(cors());
+
+app.use(express.static("public"));
 
 // router
 
-app.use('api/v1/users', routerEmployees);
+app.use("/api/v1/users", routerEmployees);
 
 // middleware errors
 app.use(notFound);
@@ -33,7 +37,7 @@ const start = async () => {
   try {
     await connectDb(process.env.MONGO_URL);
     app.listen(PORT, () => {
-      console.log('listening on port ' + PORT);
+      console.log("listening on port " + PORT);
     });
   } catch (error) {
     console.log(error);

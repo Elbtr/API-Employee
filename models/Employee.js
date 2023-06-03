@@ -1,19 +1,19 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const EmployeeSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, 'Please provide a valid name'],
+      required: [true, "Please provide a valid name"],
     },
     status: {
       type: String,
-      enum: ['contract', 'permanent'],
-      default: 'contract',
+      enum: ["contract", "permanent"],
+      default: "contract",
     },
     divisi: {
       type: [String],
-      required: [true, 'Please provide a valid divisi'],
+      required: [true, "Please provide a valid divisi"],
     },
     deuDate: {
       startDate: {
@@ -33,4 +33,4 @@ const EmployeeSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model('Employee', EmployeeSchema);
+module.exports = mongoose.model("Employee", EmployeeSchema);
