@@ -12,18 +12,13 @@ const EmployeeSchema = new mongoose.Schema(
       default: "contract",
     },
     divisi: {
-      type: [String],
-      required: [true, "Please provide a valid divisi"],
+      type: String,
     },
     deuDate: {
       startDate: {
         type: String,
         default: Date.now(),
-      },
-      endDate: {
-        type: String,
-        default: Date.now(),
-      },
+      }
     },
     active: {
       type: Boolean,
