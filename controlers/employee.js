@@ -28,6 +28,7 @@ const getFilterest = async (req, res) => {
   try {
     const queryObject = {};
     const queryDate = {};
+    const queryDivisi = {};
 
     if (name) {
       queryObject.name = { $regex: name, $options: "i" };
@@ -55,11 +56,12 @@ const getFilterest = async (req, res) => {
         ">": "$gt",
         ">=": "$gte",
         "=": "$eq",
+        "!=": "$ne",
         "<": "$lt",
         "<=": "$lte",
       };
 
-      const regEx = /\b(<|>|=|<=|>=)\b/g;
+      const regEx = /\b(<|>|=|!=|<=|>=)\b/g;
       let filter = numericFilters.replace(
         regEx,
         (match) => `_${operatorMap[match]}_`
@@ -77,16 +79,23 @@ const getFilterest = async (req, res) => {
         const [field, operator, value] = item.split("_");
         // console.log(item.split("_"));
         if (options.includes(field)) {
-          if (field === "name") {
+          if (field === "divisi") {
+            if (!queryDivisi.divisi) {
+              queryDivisi.divisi = {};
+            }
+            const divisiValue = value.split(";");
+            queryDivisi.divisi = { $in: divisiValue };
+            queryObject["divisi"] = queryDivisi.divisi;
+          } else if (field === "name") {
             queryObject[field] = { $regex: value, $options: "i" };
           } else if (field === "startDate" || field === "endDate") {
-            const dateData = { [field]: value };
             if (!queryDate.dueDate) {
               queryDate.dueDate = {};
             }
             if (field === "startDate") {
               queryDate.dueDate[operator] = value;
-            } else if (field === "endDate") {
+            }
+            if (field === "endDate") {
               queryDate.dueDate[operator] = value;
             }
             queryObject["deuDate.startDate"] = queryDate.dueDate;
@@ -96,6 +105,7 @@ const getFilterest = async (req, res) => {
         }
       });
     }
+    console.log(queryDate);
     console.log(queryObject);
 
     let result = Employees.find(queryObject);
